@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="a58e0943-48ea-4187-813b-f1088586ba03" doc:description="Global configuration placeholders" file="dev-config.yaml" />
+	<secure-properties:config name="DBPassword_Secure_Config" doc:name="Secure Properties Config" doc:id="7dc7b441-2400-4839-9d80-0e58a02a8a9d" doc:description="To use encrypted DB password" file="dev-config.yaml" key="db_passkey" >
+		<secure-properties:encrypt algorithm="Blowfish" mode="ECB" />
+	</secure-properties:config>
+	<db:config name="MySQL_Database_Config" doc:name="Database Config" doc:id="49bb95c5-91f5-43c1-8584-d57917c69aaa" doc:description="For MysQL Connection" >
+		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.username}" password="${secure::db.secret.db_password}" database="${db.dbname}" >
+			<reconnection >
+				<reconnect />
+			</reconnection>
+		</db:my-sql-connection>
+	</db:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="ad50ab95-2854-4cdc-8511-48f34b8184c9" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+</mule>

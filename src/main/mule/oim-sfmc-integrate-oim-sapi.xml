@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/mqtt3 http://www.mulesoft.org/schema/mule/mqtt3/current/mule-mqtt3.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd">
+	<flow name="oim-sfmc-integrate-oim-sapiFlow1" doc:id="4e43ffcb-740e-4468-a397-a8c1eb217050" >
+		<http:listener doc:name="GET: /callOIMSAPI" doc:id="db97297f-195c-4dc0-8aa0-55f2f0d34275" config-ref="HTTP_Listener_config" path="/callOIMSAPI"/>
+		<db:select doc:name="Select" doc:id="7b7903f4-7d93-47a3-b1d0-c2b1a2b6bd6e" config-ref="MySQL_Database_Config">
+			<db:sql ><![CDATA[select * from empl_details order by last_upd_datetime]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="[JAVA to Json]" doc:id="d5423532-ef78-43b9-913c-01842d61175c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="6496aa4b-3b9c-44a9-b9fa-66e0e5b54da1" message="API Response:  #[sizeOf(payload)]"/>
+	</flow>
+</mule>

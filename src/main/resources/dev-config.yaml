@@ -1,0 +1,13 @@
+db:
+  host: "db4free.net"
+  port: "3306"
+  dbname: "testdbc45"
+  username: "c4ebatch5"
+  secret:
+    key:  "db_passkey"
+    db_password : "![cZsJHtvcp9xGI4eh4a5ltQ==]"
+    
+    
+http:
+  host: "localhost"
+  port: "8081"
